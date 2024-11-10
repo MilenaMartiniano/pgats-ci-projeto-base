@@ -12,10 +12,10 @@ on:
 jobs:
 
     #descricao do job
-    e2-tests:
+    e2e-tests:
 
       # maquina que o job vai executar
-      runs-on: ['ubunto-latest']
+      runs-on: ['ubuntu-latest']
 
       # passo a passo das acoes do job
       steps:
@@ -37,6 +37,3 @@ jobs:
 
         - name: Teste E2E (end-to-end)
           run: yarn run e2e
-
-        
-
