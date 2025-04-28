@@ -1,16 +1,30 @@
-# CI de Nível 02 - Disparo autamtico em periodos definidos
+#CI de Nível 04 - Disparo dentro do fluxo de CI de desenvolvimento
 
-# nome que vai aparecer nas opções de pipeline
-name: 'Execução Agendada'
+# nome que vai aparecer la nas opções de pipe
+name: 'Execução Integrada'
 
-# trigger OU gatilhos de execusão
-#gatilho de exec agendada = schedule
+# triggers OU gatilhos de execução
+#gatilho de exec manual = workflow_dispatch
 
 on:
-  schedule:
-    - cron: '0 8 * * 2'
+  workflow_dispatch:
 
 jobs:
+  inspection:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalando Yarn
+        run: npm install -g yarn
+
+      - name: Instalando dependências
+        run: yarn
+
+      - name: Padronizacao de codigo (Lint)
+        run: yarn lint
+
   # descricao do job
   e2e-tests:
     # maquina que o job vai executar
@@ -20,7 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # - uses: actions/setup-node@v4
+        # - uses: actions/setup-node@v4
       #  with:
       #  node-version: lts/*
 
@@ -36,9 +50,8 @@ jobs:
       - name: Teste E2E (end-to-end)
         run: yarn run e2e
 
-        #passed, failed, cancelled
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: relatorio-de-teste
+          name: relatorio-de-testes
           path: ./playwright-report
