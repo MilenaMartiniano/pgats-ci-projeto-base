@@ -1,14 +1,18 @@
-# CI de Nível 02 - Disparo autamtico em periodos definidos
+# CI de Nível 03 - Disparo automatico sempre que outro for concluido, como o deploy
 
 # nome que vai aparecer nas opções de pipeline
-name: 'Execução Agendada'
+name: 'Execução por Deploy'
 
 # trigger OU gatilhos de execusão
-  #gatilho de exec agendada = schedule
+# gatilho de exec apos outro workflow = workflow-run
 
 on:
-    schedule:
-       - cron: '0 11 * * 1'
+  workflow_run:
+    workflows: ['Execução Manual']
+    types:
+      - completed
+
+     
 
 jobs: 
 
@@ -16,7 +20,7 @@ jobs:
   e2e-tests: 
 
     # maquina que o job vai executar
-    runs-on: 'ubuntu-latest'
+    runs-on: ubuntu-latest
 
     # passo a passo das acoes do job 
     steps: 
